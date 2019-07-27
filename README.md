@@ -30,18 +30,18 @@
    
    
 
-四：WisdomProgressHUD 使用分类
-1:  在 "OnCreate" 中的调用：
-    说明： 为了解决 android 机制不允许在 "OnCreate" 方法中向屏幕中添加UI问题，所以 "OnCreate"需要用到HUD，请调用 "startOnCreate" 方法。
+    四：WisdomProgressHUD 使用分类
+    1:  在 "OnCreate" 中的调用：
+        说明： 为了解决 android 机制不允许在 "OnCreate" 方法中向屏幕中添加UI问题，所以 "OnCreate"需要用到HUD，请调用 "startOnCreate" 方法。
 
-2:  普通使用：
-    说明： 不在 "OnCreate" 中使用 "start" 方法。
+    2:  普通使用：
+        说明： 不在 "OnCreate" 中使用 "start" 方法。
 
-3:  延迟使用：
-    说明：在当前时间延迟使用功能，调用 "after" 方法。
+    3:  延迟使用：
+        说明：在当前时间延迟使用功能，调用 "after" 方法。
     
 
-五：WisdomProgressHUD 具体API，参数
+    五：WisdomProgressHUD 具体API，参数
 
     1:
     /**
@@ -142,6 +142,6 @@
     }
     
 
-六：结语：
-   WisdomProgressHUD SDK，方便开发使用，高效性能，生命周期自动管理，推荐给大家使用！！！！
+    六：结语：
+       WisdomProgressHUD SDK，方便开发使用，高效性能，生命周期自动管理，推荐给大家使用！！！！
     
