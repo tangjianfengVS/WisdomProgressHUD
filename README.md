@@ -1,17 +1,17 @@
 # WisdomProgressHUD
 
 一：简述
-WisdomProgressHUD 是一个半透明的 HUD 指示器。 WisdomProgressHUD 是android 版SDK，由java编写，保证兼容性问题。 
-全局HUD单列对象，支持属性动态调整, 支持延时调用，无需开发关心释放问题，是一个强大的HUD库，使用简介，操作方便。
+    WisdomProgressHUD 是一个半透明的 HUD 指示器。 WisdomProgressHUD 是android 版SDK，由java编写，保证兼容性问题。 
+    全局HUD单列对象，支持属性动态调整, 支持延时调用，无需开发关心释放问题，是一个强大的HUD库，使用简介，操作方便。
 
 
 二：WisdomProgressHUD 支持类型
-1:  Default   (只有文字没有图片，默认使用)
-2:  Succee    (有文字，有图片，成功提示)
-3:  Error     (有文字，有图片，失败提示)
-4:  Warning   (有文字，有图片，警告提示)
-5:  Loading   (有文字，有图片，加载中提示) 
-              ---（"Loading" 和上面的类型不同，是耗时任务，不会自动消灭任务，需要手动调用 'dismiss'，结束回调任务也不会实现）
+    1:  Default   (只有文字没有图片，默认使用)
+    2:  Succee    (有文字，有图片，成功提示)
+    3:  Error     (有文字，有图片，失败提示)
+    4:  Warning   (有文字，有图片，警告提示)
+    5:  Loading   (有文字，有图片，加载中提示) 
+                  ---（"Loading" 和上面的类型不同，是耗时任务，不会自动消灭任务，需要手动调用 'dismiss'，结束回调任务也不会实现）
 
 
 三：WisdomProgressHUD 属性设置
