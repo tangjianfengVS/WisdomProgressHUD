@@ -14,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.Default;
+import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.HUDShowTime;
 import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.Loading;
 
 
@@ -27,7 +28,7 @@ public class WisdomHUDManager {
 
     private int showState = Default;
 
-    private long showTime = 2200;
+    private final long showTime = 2500;
 
     private static WisdomHUDManager instance = null;
 
@@ -191,12 +192,9 @@ public class WisdomHUDManager {
             }
         };
 
-        if (showTime < 500){
-            showTime = 2200;
-        }
-
+        long time = HUDShowTime > showTime? HUDShowTime:showTime;
         timer = new Timer();
-        timer.schedule(currentTask,showTime);
+        timer.schedule(currentTask,time);
     }
 
 
