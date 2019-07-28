@@ -193,5 +193,7 @@
     
     
     八：结语：
-       WisdomProgressHUD SDK，方便开发使用，高效性能，生命周期自动管理，推荐给大家使用！！！！
+       WisdomProgressHUD Android SDK，界面设计漂亮，并且是一款金典的HUD，并且支持屏蔽任务期间的用户交互。
+       WisdomProgressHUD Android SDK，开发中使用方便，性能高效，自动管理生命周期，兼容'Oncreate'方法中调用，非常推荐给大家使用！
+      
     
