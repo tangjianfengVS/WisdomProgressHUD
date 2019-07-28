@@ -142,19 +142,22 @@
     }
    
 
-    六 SDK 集成：
-      1: gradle build:
+    六: Android Studio SDK 集成：
+      1: app build.gradle 配置 'https://jitpack.io' :
       
         allprojects {
 		    repositories {
 			  ...
 			  maven { url 'https://jitpack.io' }
 		   }
-	    }
+	}
+	
+	
+      2: app build.gradle 配置 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1' :
       
-       dependencies {
+        dependencies {
 	        implementation 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1'
-	   }
+	}
     
     
     七：结语：
