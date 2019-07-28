@@ -3,7 +3,8 @@
     一：简述
        WisdomProgressHUD 是一个半透明的 HUD 指示器。 WisdomProgressHUD 是android 版SDK，由java编写，保证兼容性问题。 
        全局HUD单列对象，支持属性动态调整, 支持延时调用，无需开发关心释放问题，是一个强大的HUD库，使用简介，操作方便。
-
+       下面对功能进行分析。
+       
 
     二：WisdomProgressHUD 支持类型
         1:  Default   (只有文字没有图片，默认使用)
@@ -25,9 +26,7 @@
             /** task end handler task. （任务结束回调） */
             void finish();
         }
-    
     ......后面有待扩展
-   
    
 
     四：WisdomProgressHUD 使用分类
@@ -42,124 +41,157 @@
     
 
     五：WisdomProgressHUD 具体API，参数
+        1:
+        /**
+         *  ----start show -----
+         *
+         *  showState：         task type, defoult value 'Default'.      (任务类型)
+         *  context ：          'Context'  value.
+         *  text:               show textView title value.               (文字)
+         */
+        public static void start(int showState, Context context, String text){
+            WisdomHUDManager.start(showState,context,text);
+        }
 
-    1:
-    /**
-     *  ----start show -----
-     *
-     *  showState：         task type, defoult value 'Default'.      (任务类型)
-     *  context ：          'Context'  value.
-     *  text:               show textView title value.               (文字)
-     */
-    public static void start(int showState, Context context, String text){
-        WisdomHUDManager.start(showState,context,text);
-    }
+        2:
+        /**
+         *  ----start show with 'WisdomProgressHUD.FinishHandler'-----
+         *
+         *  showState：         task type, defoult value 'Default'.      (任务类型)
+         *  context ：          'Context' value.
+         *  text:               show textView title value.                (文字)
+         *  finishHandler：     task end handler task.                    (任务结束回调)
+         */
+        public static void start(int showState, Context context, String text, WisdomProgressHUD.FinishHandler finishHandler){
+            WisdomHUDManager.start(showState,context,text,finishHandler);
+        }
     
+        3:
+        /**
+         *  ---- start show OnCreate -----
+         *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
+         *
+         *  showState：         task type, defoult value 'Default'.       (任务类型)
+         *  context ：          'Context'.
+         *  text:               show textView title value.                (文字)
+         *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
+         */
+        public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView){
+            WisdomHUDManager.startOnCreate(showState,context,text,rootView);
+        }
 
-    2:
-    /**
-     *  ----start show with 'WisdomProgressHUD.FinishHandler'-----
-     *
-     *  showState：         task type, defoult value 'Default'.      (任务类型)
-     *  context ：          'Context' value.
-     *  text:               show textView title value.                (文字)
-     *  finishHandler：     task end handler task.                    (任务结束回调)
-     */
-    public static void start(int showState, Context context, String text, WisdomProgressHUD.FinishHandler finishHandler){
-        WisdomHUDManager.start(showState,context,text,finishHandler);
-    }
+        4:
+        /**
+         *  ---- start show OnCreate with 'WisdomProgressHUD.FinishHandler' -----
+         *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
+         *
+         *  showState：         task type, defoult value 'Default'.       (任务类型)
+         *  context ：          'Context'.
+         *  text:               show textView title value.                (文字)
+         *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
+         *  finishHandler：     task end handler task.                    (任务结束回调)
+         */
+        public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView,     WisdomProgressHUD.FinishHandler finishHandler){
+           WisdomHUDManager.startOnCreate(showState,context,text,rootView,finishHandler);
+        }
     
+        5:
+        /**
+         *  -----  after task -----
+         *  delay: after task time value.
+         */
+        public static void after(final int showState, final Context context, final String text, long delay){
 
-    3:
-    /**
-     *  ---- start show OnCreate -----
-     *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
-     *
-     *  showState：         task type, defoult value 'Default'.       (任务类型)
-     *  context ：          'Context'.
-     *  text:               show textView title value.                (文字)
-     *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
-     */
-    public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView){
-        WisdomHUDManager.startOnCreate(showState,context,text,rootView);
-    }
+            WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
+                @Override
+                public void afterHandler() {
+                    WisdomProgressHUD.start(showState,context,text);
+                }
+            });
+        }
 
+        6:
+        /**
+         *  -----  after task -----
+         *  delay: after task time value.
+         */
+        public static void after(final int showState, final Context context, final String text, final long delay, final WisdomProgressHUD.FinishHandler finishHandler){
 
-    4:
-    /**
-     *  ---- start show OnCreate with 'WisdomProgressHUD.FinishHandler' -----
-     *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
-     *
-     *  showState：         task type, defoult value 'Default'.       (任务类型)
-     *  context ：          'Context'.
-     *  text:               show textView title value.                (文字)
-     *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
-     *  finishHandler：     task end handler task.                    (任务结束回调)
-     */
-    public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView, WisdomProgressHUD.FinishHandler finishHandler){
-        WisdomHUDManager.startOnCreate(showState,context,text,rootView,finishHandler);
-    }
+            WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
+                @Override
+                public void afterHandler() {
+                    WisdomProgressHUD.start(showState,context,text,finishHandler);
+                }
+            });
+        }
 
+        7:
+        /**
+         *  dismiss（手动释放）
+         */
+        public static void dismiss() {
+            WisdomHUDManager.dismiss();
+        }
     
-    5:
-    /**
-     *  -----  after task -----
-     *  delay: after task time value.
-     */
-    public static void after(final int showState, final Context context, final String text, long delay){
+    
+        六：WisdomScreenUtils： 提供屏幕尺寸转换处理功能
+            /** 
+             *   根据手机的分辨率从 dp 的单位 转成为 px(像素)
+             */
+             public static int dip2px(Context context, float dpValue) { return (int) }
 
-        WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
-            @Override
-            public void afterHandler() {
-                WisdomProgressHUD.start(showState,context,text);
-            }
-        });
-    }
+            /** 
+             *   根据手机的分辨率从 px(像素) 的单位 转成为 dp 
+             */
+            public static int px2dip(Context context, float pxValue) { return (int) }
 
+            /**  获取屏幕密度 */
+            public static float getScreenDensity(Context context) { return float }
 
-    6:
-    /**
-     *  -----  after task -----
-     *  delay: after task time value.
-     */
-    public static void after(final int showState, final Context context, final String text, final long delay, final WisdomProgressHUD.FinishHandler finishHandler){
+            /**  获取屏幕宽度(像素) */
+            public static int getScreenWidthPixels(Context context) { return int }
 
-        WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
-            @Override
-            public void afterHandler() {
-                WisdomProgressHUD.start(showState,context,text,finishHandler);
-            }
-        });
-    }
+            /**  获取屏幕宽度(dp) */
+            public static float getScreenWidthDp(Context context) { return float }
 
+            /**  获取屏幕高度(像素) */
+            public static int getScreenHeightPixels(Context context) { return int }
 
-    7:
-    /**
-     *  dismiss（手动释放）
-     */
-    public static void dismiss() {
-        WisdomHUDManager.dismiss();
-    }
-   
+            /**  获取屏幕高度(dp) */
+            public static float getScreenHeightDp(Context context) { return float }
 
-    六: Android Studio SDK 集成：
-      1: app build.gradle 配置 'https://jitpack.io' :
-      
-        allprojects {
-		    repositories {
-			  ...
-			  maven { url 'https://jitpack.io' }
-		   }
-	}
+            /**  获取状态栏高度 */
+            public static int getStatusHeight(Context context) { return int }
+
+            /**
+             *  保存屏幕截图到本地
+             *  @param activity
+             *  @param strFileName 文件全路径:例如 "/sdcard/screen_shot_20160424.jpg"
+             */
+            public static void savScreenShot(Activity activity, String strFileName) { }
+
+            /**
+             *  截图
+             *  也可以调用shell命令去截图  screencap -p test.png
+             *  @param activity 截取activity 所在的页面的截图,即使退到后台也是截取这个activity
+             */
+            private static Bitmap takeShot(Activity activity) { return Bitmap }
+ 
+
+     七: Android Studio SDK 集成：
+            1: app build.gradle 配置 'https://jitpack.io' :
+                   allprojects {
+		        repositories {
+		    	  maven { url 'https://jitpack.io' }
+		       }
+	           }
 	
-	
-      2: app build.gradle 配置 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1' :
-      
-        dependencies {
-	        implementation 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1'
-	}
+            2: app build.gradle 配置 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1' :
+                   dependencies {
+	                implementation 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1'
+	           }
     
     
-    七：结语：
+    八：结语：
        WisdomProgressHUD SDK，方便开发使用，高效性能，生命周期自动管理，推荐给大家使用！！！！
     
