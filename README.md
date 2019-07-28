@@ -1,6 +1,6 @@
 # WisdomProgressHUD
 
-    一：简述
+    一：简述（za shi chinese，为了方便大家阅读，尽量使用中文备注了）
        WisdomProgressHUD 是一个半透明的 HUD 指示器。 WisdomProgressHUD 是android 版SDK，由java编写，保证兼容性问题。 
        全局HUD单列对象，支持属性动态调整, 支持延时调用，无需开发关心释放问题，是一个强大的HUD库，使用简介，操作方便。
        下面对功能进行分析。
