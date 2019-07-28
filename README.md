@@ -140,8 +140,23 @@
     public static void dismiss() {
         WisdomHUDManager.dismiss();
     }
-    
+   
 
-    六：结语：
+    六 SDK 集成：
+      1: gradle build:
+      
+        allprojects {
+		    repositories {
+			  ...
+			  maven { url 'https://jitpack.io' }
+		   }
+	    }
+      
+       dependencies {
+	        implementation 'com.github.tangjianfengVS:WisdomProgressHUD:0.0.1'
+	   }
+    
+    
+    七：结语：
        WisdomProgressHUD SDK，方便开发使用，高效性能，生命周期自动管理，推荐给大家使用！！！！
     
