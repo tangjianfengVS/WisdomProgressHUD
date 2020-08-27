@@ -3,173 +3,142 @@ package com.example.jianfeng.wisdomprogresshud;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.Default;
-import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.HUDShowTime;
-import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.Loading;
+import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.CurrentHUDShowTime;
 
 
 public class WisdomHUDManager {
 
-    // 交互状态 - 默认覆盖
-    private boolean coverState = true;
+    @WisdomHUDStatus.HUDStatus
+    private int showState = WisdomHUDStatus.Text;
 
-    // 默认覆盖色-黑色60%透明
-    private int coverColor = 0x66000000;
-
-    private int showState = Default;
-
-    private final long showTime = 2500;
+    private final long MinShowTime = 1000;
 
     private static WisdomHUDManager instance = null;
 
-    private WisdomProgressHUD.FinishHandler showHander;
+    private WisdomProgressHUD.WisdomHUDFinishHandler finishHandler;
 
-    private Context context;
+    private WisdomHintView hintView;
 
-    private ViewGroup rootView;
+    private ViewGroup containerView;
 
-    private WisdomHintView baseView;
+    private Boolean isHistoryAddApplication = false; // 是否添加到Application
 
     private Timer timer;
 
 
     public static WisdomHUDManager shared(){
-        if (instance == null ){
-            instance = new WisdomHUDManager();
+        synchronized (WisdomHUDManager.class) {
+            if (instance == null) {
+                instance = new WisdomHUDManager();
+            }
         }
         return instance;
     }
 
 
-    // 开始展示
-    public static void start(int showState, Context context,String text){
-        WisdomHUDManager hud = WisdomHUDManager.shared();
-        hud.showState = showState;
-        hud.showHander = null;
-        hud.setupUI(context,text);
-    }
-
-
-    // 开始展示, 显示完成会有回调
-    public static void start(int showState, Context context,String text, WisdomProgressHUD.FinishHandler finishHander){
-        WisdomHUDManager hud = WisdomHUDManager.shared();
-        hud.showState = showState;
-        if (showState == Loading){
-            hud.showHander = null;
-        }else {
-            hud.showHander = finishHander;
-        }
-        hud.setupUI(context,text);
-    }
-
-
-    public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView) {
-        WisdomHUDManager hud = WisdomHUDManager.shared();
-        hud.showState = showState;
-        hud.showHander = null;
-        hud.onCreateSetupUI(context,text,rootView);
-    }
-
-
-    public static void startOnCreate(int showState, Context context,String text, ViewGroup rootView, WisdomProgressHUD.FinishHandler finishHander){
-        WisdomHUDManager hud = WisdomHUDManager.shared();
-        hud.showState = showState;
-        if (showState == Loading){
-            hud.showHander = null;
-        }else {
-            hud.showHander = finishHander;
-        }
-        hud.onCreateSetupUI(context,text,rootView);
-    }
-
-
-    public static void dismiss() {
-        WisdomHUDManager.shared().removeHUD();
-    }
-
-
-    private void setupUI(Context context, String text){
-
-        if (baseView == null || this.context != context){
-            if (baseView != null) {
-                WindowManager mWindowManager = (WindowManager)baseView.getContext().getSystemService(Context.WINDOW_SERVICE);
-                mWindowManager.removeView(baseView);
+    /**
+     *  start on Application
+     */
+    public static void start_onApplication(@WisdomHUDStatus.HUDStatus final int showState,
+                                           final Context context,
+                                           final String text,
+                                           final WisdomProgressHUD.WisdomHUDFinishHandler finishHandler){
+        WisdomProgressHUD.goMainLooper(new WisdomProgressHUD.WisdomHUDFinishHandler() {
+            @Override
+            public void finish() {
+                WisdomHUDManager hud = WisdomHUDManager.shared();
+                hud.showState = showState;
+                hud.finishHandler = finishHandler;
+                Context applicationContext = context.getApplicationContext();
+                hud.setupUI(applicationContext, context,null, text);
             }
-
-            baseView = WisdomHintView.init(context,showState,text);
-            WindowManager mWindowManager = (WindowManager)baseView.getContext().getSystemService(Context.WINDOW_SERVICE);
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-
-            /** 该Type描述的是形成的窗口的层级关系，下面会详细列出它的属性 */
-            layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
-
-            /** 设置窗口的位置 */
-            layoutParams.gravity = Gravity.CENTER;
-
-            /** 不设置这个弹出框的透明遮罩显示为黑色 */
-            layoutParams.format = PixelFormat.TRANSLUCENT;
-
-            /** 窗口的宽 */
-            layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
-
-            /** 窗口的高 */
-            layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
-
-            //获取当前Activity中的View中的TOken,来依附Activity，
-            //因为设置了该值，纳闷写的这些代码不能出现在onCreate();否则会报错。
-            layoutParams.token = baseView.getWindowToken();
-            mWindowManager.addView(baseView, layoutParams);
-        }else {
-            baseView.update(showState,text);
-        }
-
-        this.context = context;
-
-        baseView.setBackgroundColor(coverColor);
-        baseView.updateUI();
-        setTimer();
+        });
     }
 
 
-    private void onCreateSetupUI(Context context, String text, ViewGroup rootView) {
-        if (baseView != null) {
-            if (rootView != null){
-                rootView.removeView(baseView);
+    /**
+     *  start on Application
+     */
+    public static void start(@WisdomHUDStatus.HUDStatus final int showState,
+                             final Context context,
+                             final ViewGroup containerView,
+                             final String text,
+                             final WisdomProgressHUD.WisdomHUDFinishHandler finishHandler){
+        WisdomProgressHUD.goMainLooper(new WisdomProgressHUD.WisdomHUDFinishHandler() {
+            @Override
+            public void finish() {
+                WisdomHUDManager hud = WisdomHUDManager.shared();
+                hud.showState = showState;
+                hud.finishHandler = finishHandler;
+                hud.setupUI(null, context,containerView, text);
+            }
+        });
+    }
+
+
+    // applicationContext 与 containerView 不同时存在
+    private void setupUI(Context applicationContext, Context context, ViewGroup containerView, String text){
+        if (this.containerView != containerView){
+            remove();
+        }else if((applicationContext != null && !this.isHistoryAddApplication) || (applicationContext == null && this.isHistoryAddApplication)){
+            remove();
+        }
+
+        this.containerView = containerView;
+
+        if (hintView == null) {
+            hintView = new WisdomHintView(context);
+
+            if (this.containerView != null) {
+                ViewGroup.LayoutParams layoutParams = containerView.getLayoutParams();
+                this.containerView.addView(hintView, layoutParams);
+
+                this.isHistoryAddApplication = false;
+
+            }else if(applicationContext != null) {
+                WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+                /** 该Type描述的是形成的窗口的层级关系，下面会详细列出它的属性 */
+                layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
+
+                /** 设置窗口的位置 */
+                layoutParams.gravity = Gravity.CENTER;
+
+                /** 不设置这个弹出框的透明遮罩显示为黑色 */
+                layoutParams.format = PixelFormat.TRANSLUCENT;
+
+                /** 窗口的宽 */
+                layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+
+                /** 窗口的高 */
+                layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT;
+                WindowManager mWindowManager = (WindowManager)hintView.getContext().getSystemService(Context.WINDOW_SERVICE);
+                mWindowManager.addView(hintView, layoutParams);
+
+                this.isHistoryAddApplication = true;
             }else {
-                WindowManager mWindowManager = (WindowManager)baseView.getContext().getSystemService(Context.WINDOW_SERVICE);
-                mWindowManager.removeView(baseView);
+
             }
         }
 
-        this.context = context;
-        this.rootView = rootView;
+        hintView.update(showState, text);
 
-        baseView = WisdomHintView.init(context,showState,text);
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        rootView.addView(baseView,layoutParams);
-
-        baseView.setBackgroundColor(coverColor);
-        baseView.updateUI();
-        setTimer();
+        startTimer();
     }
 
 
-    private void setTimer() {
+    private void startTimer() {
         if (timer != null){
             timer.cancel();
         }
 
-        if (showState == Loading){
+        if (showState == WisdomHUDStatus.Loading){
             return;
         }
 
@@ -177,49 +146,57 @@ public class WisdomHUDManager {
             @Override
             public void run(){
                 try{
-
-                    Handler mainThread = new Handler(Looper.getMainLooper());
-                    mainThread.post(new Runnable() {
+                    WisdomProgressHUD.goMainLooper(new WisdomProgressHUD.WisdomHUDFinishHandler() {
                         @Override
-                        public void run(){
+                        public void finish() {
                             removeHUD();
                         }
                     });
-
                 } catch (Exception e){
                     e.printStackTrace();
                 }
             }
         };
 
-        long time = HUDShowTime > showTime? HUDShowTime:showTime;
+        long time = CurrentHUDShowTime >= MinShowTime? CurrentHUDShowTime:MinShowTime;
         timer = new Timer();
-        timer.schedule(currentTask,time);
+        timer.schedule(currentTask, time);
     }
 
 
     private void removeHUD() {
-        context = null;
-        if (timer != null){
-            timer.cancel();
-            timer = null;
-        }
+        remove();
 
-        if (baseView != null) {
-            if (rootView != null){
-                rootView.removeView(baseView);
-            }else {
-                WindowManager mWindowManager = (WindowManager)baseView.getContext().getSystemService(Context.WINDOW_SERVICE);
-                mWindowManager.removeView(baseView);
-            }
-            rootView = null;
-            baseView = null;
-        }
-
-        if (showHander != null) {
-            showHander.finish();
-            showHander = null;
+        if (finishHandler != null) {
+            finishHandler.finish();
+            finishHandler = null;
         }
     }
 
+
+    // 移除
+    private void remove(){
+        if (this.hintView != null) {
+            if (this.containerView != null){
+                this.containerView.removeView(this.hintView);
+            }else {
+                WindowManager mWindowManager = (WindowManager)hintView.getContext().getSystemService(Context.WINDOW_SERVICE);
+                mWindowManager.removeView(this.hintView);
+            }
+        }
+
+        this.hintView = null;
+        this.containerView = null;
+        this.isHistoryAddApplication = false;
+    }
+
+
+    public static void dismiss() {
+        WisdomProgressHUD.goMainLooper(new WisdomProgressHUD.WisdomHUDFinishHandler() {
+            @Override
+            public void finish() {
+                WisdomHUDManager.shared().removeHUD();
+            }
+        });
+    }
 }

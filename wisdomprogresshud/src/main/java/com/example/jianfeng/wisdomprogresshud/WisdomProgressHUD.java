@@ -1,121 +1,122 @@
 package com.example.jianfeng.wisdomprogresshud;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ViewGroup;
 
 
 public class WisdomProgressHUD {
 
-    /*  Only words without pictures. (只有文字没有图片) */
-    public static final int Default = 0;
+    /* 【1】：UI 主题风格类型，默认未 'WisdomHUDStyle_Black' */
+    @WisdomHUDStyleStatus.HUDStyleStatus
+    public static int CurrentHUDStyleState = WisdomHUDStyleStatus.WisdomHUDStyle_Black;
 
-    public static final int Succee = 1;
 
-    public static final int Error = 2;
+    /* 【2】：Setting showTime: long, Cannot be less than minimum 1000 long */
+    public static long CurrentHUDShowTime = 2500;
 
-    public static final int Warning = 3;
+
+    /* 【3】：Setting HUDTextSize: long, minSize = 10, maxSize = 18 */
+    public static int CurrentHUDTextSize = 13;
+
 
     /**
-     *  Time-consuming tasks do not automatically disappear. (耗时任务，不会自动消灭任务)
-     *  I need to manually call 'dismiss'.                  （需要手动调用 'dismiss'）
+     * task end handler task. （任务结束回调）
      */
-    public static final int Loading = 4;
-
-
-
-    /*  Setting TextSize: pd, Cannot be less than minimum 13 fonts */
-    public static float HUDTextSize = 13;
-
-
-    /*  Setting showTime: long, Cannot be less than minimum 2500 long */
-    public static long HUDShowTime = 2500;
-
-
-    /** task end handler task. （任务结束回调） */
-    public interface FinishHandler {
+    public interface WisdomHUDFinishHandler {
         void finish();
     }
 
 
     /**
-     *  ----start show -----
+     *  ----start on Application -----
      *
      *  showState：         task type, defoult value 'Default'.      (任务类型)
-     *  context ：          'Context'  value.
      *  text:               show textView title value.               (文字)
      */
-    public static void start(int showState, Context context, String text){
-        WisdomHUDManager.start(showState,context,text);
+    public static void start_onApplication(@WisdomHUDStatus.HUDStatus int showState, Context context, String text){
+        WisdomHUDManager.start_onApplication(showState,context,text,null);
     }
 
 
     /**
-     *  ----start show with 'WisdomProgressHUD.FinishHandler'-----
+     *  ----start on Application -----
      *
      *  showState：         task type, defoult value 'Default'.      (任务类型)
-     *  context ：          'Context' value.
-     *  text:               show textView title value.                (文字)
-     *  finishHandler：     task end handler task.                    (任务结束回调)
+     *  text:               show textView title value.               (文字)
+     *  finishHandler：     task end handler task.                   (任务结束回调)
      */
-    public static void start(int showState, Context context, String text, WisdomProgressHUD.FinishHandler finishHandler){
-        WisdomHUDManager.start(showState,context,text,finishHandler);
+    public static void start_onApplication(@WisdomHUDStatus.HUDStatus int showState, Context context, String text, WisdomHUDFinishHandler finishHandler){
+        WisdomHUDManager.start_onApplication(showState,context,text,finishHandler);
     }
 
 
     /**
-     *  ---- start show OnCreate -----
-     *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
+     *  ----start on ViewGroup -----
      *
-     *  showState：         task type, defoult value 'Default'.       (任务类型)
+     *  showState：         task type, defoult value 'Default'.      (任务类型)
      *  context ：          'Context'.
-     *  text:               show textView title value.                (文字)
-     *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
+     *  containerView：     The 'Context' subView.                   (布局容器)
+     *  text:               show textView title value.               (文字)
      */
-    public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView){
-        WisdomHUDManager.startOnCreate(showState,context,text,rootView);
+    public static void start(@WisdomHUDStatus.HUDStatus int showState, Context context, ViewGroup containerView, String text){
+        WisdomHUDManager.start(showState,context,containerView,text,null);
     }
 
 
     /**
-     *  ---- start show OnCreate with 'WisdomProgressHUD.FinishHandler' -----
-     *  Use the API when a prompt needs to be loaded in 'OnCreate'.（在 ‘OnCreate’ 中需要加载提示时使用API）
+     *  ----start on ViewGroup -----
      *
-     *  showState：         task type, defoult value 'Default'.       (任务类型)
+     *  showState：         task type, defoult value 'Default'.      (任务类型)
      *  context ：          'Context'.
-     *  text:               show textView title value.                (文字)
-     *  ViewGroup：         The 'Context' rootLayout.                 (Context的底层布局)
-     *  finishHandler：     task end handler task.                    (任务结束回调)
+     *  containerView：     The 'Context' subView.                   (布局容器)
+     *  text:               show textView title value.               (文字)
+     *  finishHandler：     task end handler task.                   (任务结束回调)
      */
-    public static void startOnCreate(int showState, Context context, String text, ViewGroup rootView, WisdomProgressHUD.FinishHandler finishHandler){
-        WisdomHUDManager.startOnCreate(showState,context,text,rootView,finishHandler);
+    public static void start(@WisdomHUDStatus.HUDStatus int showState, Context context, ViewGroup containerView, String text, WisdomHUDFinishHandler finishHandler){
+        WisdomHUDManager.start(showState,context,containerView,text,finishHandler);
     }
 
 
     /**
-     *  -----  after task -----
+     *  -----  after start task on viewGroup -----
      *  delay: after task time value.
      */
-    public static void after(final int showState, final Context context, final String text, long delay){
+    public static void after_start(@WisdomHUDStatus.HUDStatus final int showState, final Context context, final ViewGroup containerView, final String text, long delay, final WisdomHUDFinishHandler finishHandler){
 
         WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
             @Override
             public void afterHandler() {
-                WisdomProgressHUD.start(showState,context,text);
+                WisdomHUDManager.start(showState,context,containerView,text,finishHandler);
             }
         });
     }
 
 
     /**
-     *  -----  after task -----
+     *  -----  after start task on application -----
      *  delay: after task time value.
      */
-    public static void after(final int showState, final Context context, final String text, final long delay, final WisdomProgressHUD.FinishHandler finishHandler){
+    public static void after_start_onApplication(@WisdomHUDStatus.HUDStatus final int showState, final Context context, final String text, long delay, final WisdomHUDFinishHandler finishHandler){
 
         WisdomHUDTimer.after(delay, new WisdomHUDTimer.WisdomTimerHandler() {
             @Override
             public void afterHandler() {
-                WisdomProgressHUD.start(showState,context,text,finishHandler);
+                WisdomHUDManager.start_onApplication(showState,context,text,finishHandler);
+            }
+        });
+    }
+
+
+    /* go main looper */
+    public static void goMainLooper(final WisdomProgressHUD.WisdomHUDFinishHandler finishHandler){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (finishHandler != null){
+                    finishHandler.finish();
+                }
             }
         });
     }
