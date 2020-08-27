@@ -6,6 +6,7 @@ import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -97,7 +98,8 @@ public class WisdomHUDManager {
             hintView = new WisdomHintView(context);
 
             if (this.containerView != null) {
-                ViewGroup.LayoutParams layoutParams = containerView.getLayoutParams();
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 this.containerView.addView(hintView, layoutParams);
 
                 this.isHistoryAddApplication = false;
