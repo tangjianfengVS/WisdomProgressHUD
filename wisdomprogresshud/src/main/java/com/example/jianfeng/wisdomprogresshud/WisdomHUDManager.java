@@ -25,7 +25,7 @@ public class WisdomHUDManager {
 
     private WisdomProgressHUD.WisdomHUDFinishHandler finishHandler;
 
-    private WisdomHintView hintView;
+    private WisdomHUDHintView hintView;
 
     private ViewGroup containerView;
 
@@ -95,7 +95,7 @@ public class WisdomHUDManager {
         this.containerView = containerView;
 
         if (hintView == null) {
-            hintView = new WisdomHintView(context);
+            hintView = new WisdomHUDHintView(context);
 
             if (this.containerView != null) {
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);

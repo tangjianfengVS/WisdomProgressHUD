@@ -12,10 +12,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
         <Button
             android:id="@+id/activity_main_one_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:stateListAnimator="@null"
             android:text="start_onApplication: 警告：请重试！"
             android:background="@color/cardview_shadow_start_color"
 
@@ -29,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="start_onApplication: Text"
+            android:stateListAnimator="@null"
             android:background="@color/cardview_shadow_start_color"
 
             android:layout_marginTop="20dp"
@@ -42,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="start: 警告"
+            android:stateListAnimator="@null"
             android:background="@color/cardview_shadow_start_color"
 
             android:layout_below="@+id/activity_main_two_button"
@@ -55,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="start: 成功"
+            android:stateListAnimator="@null"
             android:background="@color/cardview_shadow_start_color"
 
             android:layout_below="@+id/activity_main_three_button"

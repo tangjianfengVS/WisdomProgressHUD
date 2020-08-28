@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -19,11 +20,11 @@ import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.CurrentHU
 import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.CurrentHUDTextSize;
 
 
-class WisdomHintView extends RelativeLayout {
+class WisdomHUDHintView extends RelativeLayout {
 
     private WisdomScreenUtils screenUtils = new WisdomScreenUtils();
 
-    private RelativeLayout mContainerLayout;
+    private RelativeLayout mCoverLayout;
 
     private WisdomHUDRoundView mHudRoundView;
 
@@ -52,8 +53,14 @@ class WisdomHintView extends RelativeLayout {
     private final int HUDMaxWidth = (int) screenUtils.getScreenWidthDp(getContext())/3*2+20; // 最大宽度
 
 
-    public WisdomHintView(Context context) {
+    public WisdomHUDHintView(Context context) {
         super(context);
+
+        setClickable(true);
+
+        setFocusable(true);
+
+        setOnClickListener(null);
 
         setupUI();
     }
@@ -85,10 +92,10 @@ class WisdomHintView extends RelativeLayout {
         mImageView.setImageResource(R.mipmap.wisdom_succee);
         //mImageView.setBackgroundColor(Color.GREEN);
 
-        mContainerLayout = new RelativeLayout(getContext());
-        mContainerLayout.setBackgroundColor(0x80000000);
+        mCoverLayout = new RelativeLayout(getContext());
+        mCoverLayout.setBackgroundColor(Color.parseColor("#73000000"));
         RelativeLayout.LayoutParams containerParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        addView(mContainerLayout, containerParams);
+        addView(mCoverLayout, containerParams);
 
         mHudRoundView = new WisdomHUDRoundView(getContext());
         RelativeLayout.LayoutParams hudRoundParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);

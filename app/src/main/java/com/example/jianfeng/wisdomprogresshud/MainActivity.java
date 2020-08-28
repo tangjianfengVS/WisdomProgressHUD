@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         one_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WisdomProgressHUD.start_onApplication(WisdomHUDStatus.Loading, context,"Loading...");
+                //WisdomProgressHUD.start_onApplication(WisdomHUDStatus.Loading, context,"Loading...");
+                WisdomProgressHUD.start(WisdomHUDStatus.Loading, context, rootLayout,"Loading...");
 
                 TimerTask task = new TimerTask() {
                     @Override
