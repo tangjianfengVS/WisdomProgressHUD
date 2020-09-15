@@ -44,7 +44,7 @@
             android:id="@+id/activity_main_three_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="start: 警告"
+            android:text="start: 失败"
             android:stateListAnimator="@null"
             android:background="@color/cardview_shadow_start_color"
 
@@ -63,6 +63,20 @@
             android:background="@color/cardview_shadow_start_color"
 
             android:layout_below="@+id/activity_main_three_button"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+
+        <Button
+            android:id="@+id/activity_main_five_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="Loading_Rotate: 成功"
+            android:stateListAnimator="@null"
+            android:background="@color/cardview_shadow_start_color"
+
+            android:layout_below="@+id/activity_main_four_button"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"/>

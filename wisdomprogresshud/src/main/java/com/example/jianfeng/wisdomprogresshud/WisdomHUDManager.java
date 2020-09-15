@@ -14,7 +14,7 @@ import java.util.TimerTask;
 import static com.example.jianfeng.wisdomprogresshud.WisdomProgressHUD.CurrentHUDShowTime;
 
 
-public class WisdomHUDManager {
+class WisdomHUDManager {
 
     @WisdomHUDStatus.HUDStatus
     private int showState = WisdomHUDStatus.Text;

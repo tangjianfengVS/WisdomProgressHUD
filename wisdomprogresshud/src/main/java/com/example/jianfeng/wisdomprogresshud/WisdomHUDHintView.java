@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -121,20 +120,12 @@ class WisdomHUDHintView extends RelativeLayout {
         imageLayoutParams.bottomMargin = screenUtils.dip2px(getContext(), TextImageEdgeDistance);
         addView(mImageView, imageLayoutParams);
 
-        if (CurrentHUDStyleState == WisdomHUDStyleStatus.WisdomHUDStyle_White){
-            mHudRoundView.setBackgroundColor(0xA6ffffff);
-            mTextView.setTextColor(Color.parseColor("#000000"));
-        }else if (CurrentHUDStyleState == WisdomHUDStyleStatus.WisdomHUDStyle_Black){
-            mHudRoundView.setBackgroundColor(0xA6000000);
-            mTextView.setTextColor(Color.parseColor("#ffffff"));
-        }else {
-            mHudRoundView.setBackgroundColor(0xA6000000);
-            mTextView.setTextColor(Color.parseColor("#ffffff"));
-        }
+        setItemColor();
     }
 
 
     public void update(int showState, String text){
+        setItemColor();
 
         int size = CurrentHUDTextSize;
         if (size > TextMaxSize){
@@ -200,6 +191,18 @@ class WisdomHUDHintView extends RelativeLayout {
                 mImageView.setImageResource(R.mipmap.wisdom_loading);
                 mImageView.setLayoutParams(imageLayoutParams);
                 break;
+            case WisdomHUDStatus.Loading_Rotate:
+                imageAnimation();
+                imageLayoutParams.width = screenUtils.dip2px(getContext(), BaseImageSize);
+                imageLayoutParams.height = screenUtils.dip2px(getContext(), BaseImageSize);
+                imageLayoutParams.bottomMargin = screenUtils.dip2px(getContext(), TextImageEdgeDistance);
+
+                mImageView.setImageResource(R.mipmap.wisdom_loading);
+                mImageView.setLayoutParams(imageLayoutParams);
+
+                mTextView.setTextColor(Color.parseColor("#00000000"));
+                mHudRoundView.setBackgroundColor(0x00ffffff);
+                break;
             default:
                 mImageView.clearAnimation();
                 imageLayoutParams.width = 0;
@@ -207,6 +210,20 @@ class WisdomHUDHintView extends RelativeLayout {
                 imageLayoutParams.bottomMargin = 0;
                 mImageView.setLayoutParams(imageLayoutParams);
                 break;
+        }
+    }
+
+
+    private void setItemColor(){
+        if (CurrentHUDStyleState == WisdomHUDStyleStatus.WisdomHUDStyle_White){
+            mHudRoundView.setBackgroundColor(0xA6ffffff);
+            mTextView.setTextColor(Color.parseColor("#000000"));
+        }else if (CurrentHUDStyleState == WisdomHUDStyleStatus.WisdomHUDStyle_Black){
+            mHudRoundView.setBackgroundColor(0xA6000000);
+            mTextView.setTextColor(Color.parseColor("#ffffff"));
+        }else {
+            mHudRoundView.setBackgroundColor(0xA6000000);
+            mTextView.setTextColor(Color.parseColor("#ffffff"));
         }
     }
 

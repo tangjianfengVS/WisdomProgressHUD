@@ -26,8 +26,16 @@ public class WisdomHUDStatus {
      */
     public static final int Loading = 4;
 
+    /**
+     *  Similar to the Loading.
+     *  'Loading' style  not background bar.
+     *
+     */
+    public static final int Loading_Rotate = 5;
+
+
     @Documented                             //表示开启Doc文档
-    @IntDef({ Text,Succee,Error,Warning,Loading})
+    @IntDef({ Text,Succee,Error,Warning,Loading,Loading_Rotate})
 
     @Target({ElementType.PARAMETER,ElementType.FIELD,ElementType.METHOD,})//表示注解作用范围，参数注解，成员注解，方法注解
 
