@@ -140,7 +140,7 @@ class WisdomHUDManager {
             timer.cancel();
         }
 
-        if (showState == WisdomHUDStatus.Loading){
+        if (showState == WisdomHUDStatus.Loading || showState == WisdomHUDStatus.Loading_Rotate){
             return;
         }
 
